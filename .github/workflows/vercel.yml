@@ -21,4 +21,5 @@ jobs:
           project-id: "prj_cPcNujxrYtgEwmLHxGmwioJaaCf3"
           org-id: "team_hXPfaVAovjA5I65NQ74l2tgV"
           production: true
+          prebuilt: true 
           
