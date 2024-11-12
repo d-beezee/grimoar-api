@@ -1,0 +1,22 @@
+on:
+  push:
+    branches:
+      - "main"
+  workflow_dispatch:
+
+name: Deploy to Vercel
+
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Vercel Actions
+        uses: nexterias/actions-vercel@v1.2.1
+        with:
+          token: ${{ secrets.VERCEL_TOKEN }}
+          project-id: "prj_cPcNujxrYtgEwmLHxGmwioJaaCf3"
+          org-id: "team_hXPfaVAovjA5I65NQ74l2tgV"
+          production: true
+          
