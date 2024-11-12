@@ -17,4 +17,15 @@ async function connect() {
     });
 }
 
+mongoose.connection.on("disconnected", () => {
+  console.log("MongoDB disconnected. Reconnecting...");
+  connect();
+});
+
+process.on("SIGINT", async () => {
+  await mongoose.connection.close();
+  console.log("MongoDB connection closed due to app termination");
+  process.exit(0);
+});
+
 export default connect;

@@ -1,7 +1,5 @@
 import express, { Request, Response } from "express";
-import mongoose from "mongoose";
 import passport from "passport";
-import { config } from "./config";
 import "./config/passport";
 import connect from "./features/db";
 import google from "./routes/auth/google";
@@ -14,6 +12,9 @@ app.use(passport.initialize());
 google(app);
 register(app);
 
+app.get("/", (req: Request, res: Response) => {
+  res.json({ message: "Hello" });
+});
 app.get(
   "/protected",
   passport.authenticate("jwt", { session: false }),
@@ -22,14 +23,6 @@ app.get(
   }
 );
 
-connect()
-  .then(() => {
-    app.listen(config.port, () => {
-      console.log(`Server running on http://localhost:${config.port}`);
-    });
-  })
-  .catch((err) => {
-    console.dir(err);
+connect();
 
-    mongoose.connection.close();
-  });
+export default app;
