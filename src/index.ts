@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import * as OpenApiValidator from "express-openapi-validator";
 import passport from "passport";
 import { config } from "./config";
@@ -6,26 +6,21 @@ import "./config/passport";
 import connect from "./features/db";
 import google from "./routes/auth/google";
 import passwordAuth from "./routes/auth/password";
+import protectedRoute from "./routes/protected";
 import register from "./routes/register";
+import root from "./routes/root";
 
+const authenticated = passport.authenticate("jwt", { session: false });
 const app = express();
 app.use(express.json());
 app.use(passport.initialize());
 
 google(app);
-register(app);
-passwordAuth(app);
 
-app.get("/", (req: Request, res: Response) => {
-  res.json({ message: "Hello" });
-});
-app.get(
-  "/protected",
-  passport.authenticate("jwt", { session: false }),
-  (req: Request, res: Response) => {
-    res.json({ message: "Sei autenticato!" });
-  }
-);
+app.get("/", root);
+app.post("/register", register);
+app.post("/auth/password", passwordAuth);
+app.get("/protected", authenticated, protectedRoute);
 
 connect();
 

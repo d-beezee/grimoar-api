@@ -1,9 +1,9 @@
 import { sign } from "@src/features/jwt/sign";
-import { Express, Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import passport from "passport";
 
-const route = (app: Express) => {
-  app.post("/auth/password", (req: Request, res: Response, next) => {
+const route = (req: Request, res: Response, next: NextFunction) => {
+  (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate(
       "local",
       { session: false },
@@ -21,7 +21,6 @@ const route = (app: Express) => {
         return res.json({ message: "Login successful", token });
       }
     )(req, res, next);
-  });
+  };
 };
-
 export default route;
