@@ -1,0 +1,91 @@
+openapi: 3.0.0
+x-stoplight:
+  id: 0yz6u3krgrvuh
+info:
+  title: openapi.yml
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /:
+    get:
+      summary: Root
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    x-stoplight:
+                      id: shbvpjwk98cjd
+                required:
+                  - message
+      operationId: get-root
+      requestBody:
+        content: {}
+    parameters: []
+  /protected:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    x-stoplight:
+                      id: ta1llbhy0q0qi
+      operationId: get-protected
+      security:
+        - JWT: []
+  /auth/password:
+    post:
+      summary: Login with email and password
+      operationId: post-auth-password
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    x-stoplight:
+                      id: ue02k8h47nhl0
+                required:
+                  - token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  x-stoplight:
+                    id: ftt3dnrlc9pii
+                password:
+                  type: string
+                  x-stoplight:
+                    id: mjxnzdl7muryl
+              required:
+                - email
+                - password
+components:
+  schemas: {}
+  securitySchemes:
+    JWT:
+      type: http
+      scheme: bearer

@@ -1,34 +1,30 @@
-import { config } from "@src/config";
+import { sign } from "@src/features/jwt/sign";
 import User from "@src/models/User";
 import { Express, Request, Response } from "express";
-import jwt from "jsonwebtoken";
 
 const route = (app: Express) => {
   app.post("/register", async (req: Request, res: Response) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    if (!username || !password) {
-      res.status(400).json({ message: "Username e password sono richiesti" });
+    if (!email || !password) {
+      res.status(400).json({ message: "Email e password sono richiesti" });
       return;
     }
 
     try {
       // Verifica se l'utente esiste già
-      const existingUser = await User.findOne({ username });
+      const existingUser = await User.findOne({ email });
       if (existingUser) {
-        res.status(409).json({ message: "Username già in uso" });
+        res.status(409).json({ message: "Email già in uso" });
         return;
       }
 
       // Crea un nuovo utente
-      const newUser = new User({ username, password });
+      const newUser = new User({ email, password });
       await newUser.save();
 
       // Genera un token JWT
-      const token = jwt.sign({ id: newUser._id }, config.jwt.secret, {
-        expiresIn: "1h",
-      });
-
+      const token = sign({ email });
       res
         .status(201)
         .json({ token, message: "Registrazione completata con successo" });

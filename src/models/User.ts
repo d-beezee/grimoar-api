@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import mongoose, { Document, FilterQuery, Model, Schema } from "mongoose";
 
 export interface IUser extends Document {
-  username?: string;
+  email?: string;
   password?: string;
   googleId?: string;
   facebookId?: string;
@@ -14,7 +14,7 @@ interface UserModel extends Model<IUser> {
 }
 
 const userSchema = new Schema<IUser>({
-  username: { type: String, unique: true },
+  email: { type: String, unique: true },
   password: String,
   googleId: String,
   facebookId: String,
@@ -27,6 +27,12 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });
+
+// Aggiunge un metodo per validare la password
+
+userSchema.methods.validatePassword = async function (password: string) {
+  return await bcrypt.compare(password, this.password);
+};
 
 // Funzione per validare la password
 userSchema.methods.validatePassword = function (password: string) {

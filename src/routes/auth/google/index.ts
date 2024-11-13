@@ -1,6 +1,5 @@
-import { config } from "@src/config";
+import { sign } from "@src/features/jwt/sign";
 import { Express, Request, Response } from "express";
-import jwt from "jsonwebtoken";
 import passport from "passport";
 
 const route = (app: Express) => {
@@ -14,9 +13,8 @@ const route = (app: Express) => {
     passport.authenticate("google", { session: false }),
     (req: Request, res: Response) => {
       const user = req.user as any;
-      const token = jwt.sign({ id: user.id }, config.jwt.secret, {
-        expiresIn: "1h",
-      });
+
+      const token = sign({ email: user.email });
       res.json({ token });
     }
   );

@@ -8,14 +8,18 @@
     "build": "rimraf dist/ && tsc --noEmit false && tscpaths -p tsconfig.json -s ./src -o ./dist"
   },
   "dependencies": {
+    "@types/passport-local": "^1.0.38",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "express-openapi-validator": "^5.3.9",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.1",
+    "openapi-backend": "^5.11.1",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "passport-jwt": "^4.0.1"
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
