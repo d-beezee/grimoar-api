@@ -17,6 +17,9 @@ app.use(passport.initialize());
 
 google(app);
 
+app.get("/reference", (req, res) => {
+  res.sendFile("reference/api.yaml", { root: "./src" });
+});
 app.get("/", root);
 app.post("/register", register);
 app.post("/auth/password", passwordAuth);
