@@ -102,6 +102,47 @@ paths:
       operationId: get-refresh
       security:
         - RefreshToken: []
+  /register:
+    post:
+      summary: Register a new user
+      operationId: post-register
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    x-stoplight:
+                      id: 2t12pk6197xgg
+                  message:
+                    type: string
+                    x-stoplight:
+                      id: ckyul3n07lvi3
+                required:
+                  - token
+                  - message
+      description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  x-stoplight:
+                    id: 09c81lj7x8pxk
+                password:
+                  type: string
+                  x-stoplight:
+                    id: c6qb90gbmy0va
+              required:
+                - email
+                - password
 components:
   schemas: {}
   securitySchemes:
