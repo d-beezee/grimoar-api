@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 import * as OpenApiValidator from "express-openapi-validator";
 import passport from "passport";
@@ -12,6 +13,7 @@ import root from "./routes/root";
 
 const authenticated = passport.authenticate("jwt", { session: false });
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(passport.initialize());
 
