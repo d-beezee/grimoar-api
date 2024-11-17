@@ -5,7 +5,7 @@ import passport from "passport";
 import { config } from "./config";
 import "./config/passport";
 import connect from "./features/db";
-import google from "./routes/auth/google";
+import googleAuth from "./routes/auth/google";
 import passwordAuth from "./routes/auth/password";
 import protectedRoute from "./routes/protected";
 import register from "./routes/register";
@@ -17,17 +17,9 @@ app.use(cors());
 app.use(express.json());
 app.use(passport.initialize());
 
-google(app);
-
 app.get("/reference", (req, res) => {
   res.sendFile("reference/api.yaml", { root: "./src" });
 });
-app.get("/", root);
-app.post("/register", register);
-app.post("/auth/password", passwordAuth);
-app.get("/protected", authenticated, protectedRoute);
-
-connect();
 
 app.use(
   OpenApiValidator.middleware({
@@ -36,6 +28,14 @@ app.use(
     validateResponses: true,
   })
 );
+
+app.get("/", root);
+app.post("/register", register);
+app.post("/auth/password", passwordAuth);
+app.post("/auth/google", googleAuth);
+app.get("/protected", authenticated, protectedRoute);
+
+connect();
 
 export default app;
 

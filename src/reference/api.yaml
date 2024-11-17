@@ -83,6 +83,37 @@ paths:
               required:
                 - email
                 - password
+  /auth/google:
+    post:
+      summary: Login with email and password
+      operationId: post-auth-google
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    x-stoplight:
+                      id: ue02k8h47nhl0
+                required:
+                  - token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accessToken:
+                  type: string
+                  x-stoplight:
+                    id: ritm50grjl358
+              required:
+                - accessToken
+    parameters: []
   /refresh:
     get:
       summary: Your GET endpoint
