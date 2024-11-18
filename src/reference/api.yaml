@@ -138,8 +138,8 @@ paths:
       summary: Register a new user
       operationId: post-register
       responses:
-        '200':
-          description: OK
+        '201':
+          description: Created
           content:
             application/json:
               schema:
@@ -156,6 +156,12 @@ paths:
                 required:
                   - token
                   - message
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '409':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
       description: ''
       requestBody:
         content:
@@ -183,3 +189,12 @@ components:
     RefreshToken:
       type: http
       scheme: bearer
+  responses:
+    ErrorResponse:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            properties:
+              id:
+                type: string
