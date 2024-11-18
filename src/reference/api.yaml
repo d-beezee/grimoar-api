@@ -83,6 +83,35 @@ paths:
               required:
                 - email
                 - password
+  /auth/verify:
+    post:
+      summary: Login with email and password
+      operationId: post-auth-verify
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    x-stoplight:
+                      id: ue02k8h47nhl0
+                  message:
+                    type: string
+                    x-stoplight:
+                      id: dfpcznwjaqoze
+                required:
+                  - token
+      parameters:
+        - schema:
+            type: string
+          in: cookie
+          name: auth
+          required: true
+    parameters: []
   /auth/google:
     post:
       summary: Login with email and password
@@ -131,8 +160,7 @@ paths:
                     x-stoplight:
                       id: 0nqeokosfo1hm
       operationId: get-refresh
-      security:
-        - RefreshToken: []
+      security: []
   /register:
     post:
       summary: Register a new user
@@ -184,9 +212,6 @@ components:
   schemas: {}
   securitySchemes:
     JWT:
-      type: http
-      scheme: bearer
-    RefreshToken:
       type: http
       scheme: bearer
   responses:

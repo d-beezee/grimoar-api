@@ -1,4 +1,5 @@
 import passport from "passport";
+import { Strategy as CookieStrategy } from "passport-cookie";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 import { Strategy as LocalStrategy } from "passport-local";
@@ -66,6 +67,23 @@ passport.use(
       } catch (error) {
         return done(error, false);
       }
+    }
+  )
+);
+
+passport.use(
+  new CookieStrategy(
+    {
+      cookieName: "auth",
+      signed: true,
+    },
+    function (token: string, done: any) {
+      User.findByCookie(token).then((user) => {
+        if (!user) {
+          return done(null, false);
+        }
+        return done(null, user);
+      });
     }
   )
 );

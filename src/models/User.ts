@@ -1,16 +1,21 @@
+import { config } from "@src/config";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import mongoose, { Document, FilterQuery, Model, Schema } from "mongoose";
 
 export interface IUser extends Document {
-  email?: string;
+  email: string;
   password?: string;
   googleId?: string;
   facebookId?: string;
   validatePassword: (password: string) => Promise<boolean>;
+  getCrypted: () => string;
+  verifyCrypted: (hash: string) => boolean;
 }
 
 interface UserModel extends Model<IUser> {
   findOrCreate: (criteria: FilterQuery<IUser>) => Promise<IUser>;
+  findByCookie: (cookie: string) => Promise<IUser>;
 }
 
 const userSchema = new Schema<IUser>({
@@ -35,9 +40,34 @@ userSchema.methods.validatePassword = async function (password: string) {
   return await bcrypt.compare(password, this.password);
 };
 
-// Funzione per validare la password
-userSchema.methods.validatePassword = function (password: string) {
-  return bcrypt.compare(password, this.password);
+userSchema.methods.getCrypted = function () {
+  const saltedEmail = `${this.email}${config.cookies.salt}`;
+  const hmac = crypto.createHmac("sha256", config.cookies.key);
+  hmac.update(saltedEmail);
+  return hmac.digest("hex");
+};
+
+userSchema.methods.verifyCrypted = function (hash: string) {
+  const crypted = this.getCrypted();
+  return crypted === hash;
+};
+
+userSchema.statics.findByCookie = async function (cookie: string) {
+  const [email, token] = cookie.split("||");
+
+  const user = await this.findOne({ email });
+
+  if (!user) {
+    return null;
+  }
+
+  const isVerified = await user.verifyCrypted(token);
+
+  if (!isVerified) {
+    return null;
+  }
+
+  return user;
 };
 
 // Implementazione di findOrCreate

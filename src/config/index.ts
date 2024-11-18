@@ -15,6 +15,10 @@ const config = {
     clientSecret:
       process.env.GOOGLE_CLIENT_SECRET || "YOUR_GOOGLE_CLIENT_SECRET",
   },
+  cookies: {
+    key: process.env.COOKIE_KEY || "your_cookie_key",
+    salt: process.env.COOKIE_SALT || "your_cookie_salt",
+  },
 };
 
 export { config };

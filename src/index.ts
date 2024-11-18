@@ -1,3 +1,4 @@
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
 import * as OpenApiValidator from "express-openapi-validator";
@@ -7,6 +8,7 @@ import "./config/passport";
 import connect from "./features/db";
 import googleAuth from "./routes/auth/google";
 import passwordAuth from "./routes/auth/password";
+import verify from "./routes/auth/verify";
 import protectedRoute from "./routes/protected";
 import register from "./routes/register";
 import root from "./routes/root";
@@ -14,6 +16,7 @@ import root from "./routes/root";
 const authenticated = passport.authenticate("jwt", { session: false });
 const app = express();
 app.use(cors());
+app.use(cookieParser(config.cookies.key));
 app.use(express.json());
 app.use(passport.initialize());
 
@@ -31,6 +34,7 @@ app.use(
 
 app.get("/", root);
 app.post("/register", register);
+app.post("/auth/verify", verify);
 app.post("/auth/password", passwordAuth);
 app.post("/auth/google", googleAuth);
 app.get("/protected", authenticated, protectedRoute);

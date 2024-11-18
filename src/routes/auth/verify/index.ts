@@ -5,7 +5,7 @@ import passport from "passport";
 
 const route = (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate(
-    "local",
+    "cookie",
     { session: false },
     (err: any, user: IUser, info: any) => {
       if (err || !user) {
@@ -16,19 +16,11 @@ const route = (req: Request, res: Response, next: NextFunction) => {
       }
 
       const token = sign({ email: user.email });
-      const cookie = `${user.email}||${user.getCrypted()}`;
 
       // Invia il token al client
-      return res
-        .cookie("auth", cookie, {
-          httpOnly: true,
-          secure: true,
-          sameSite: "strict",
-          maxAge: 28 * 24 * 60 * 60 * 1000,
-          signed: true,
-        })
-        .json({ message: "Login successful", token });
+      return res.json({ message: "Verify successful", token });
     }
   )(req, res, next);
 };
+
 export default route;
