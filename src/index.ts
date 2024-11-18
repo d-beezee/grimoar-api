@@ -51,7 +51,7 @@ app.post("/register", register);
 app.post("/auth/verify", verify);
 app.post("/auth/password", passwordAuth);
 app.post("/auth/google", googleAuth);
-app.get("/protected", authenticated, protectedRoute);
+app.get("/protected", protectedRoute);
 
 connect();
 
