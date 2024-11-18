@@ -16,14 +16,14 @@ const authenticated = passport.authenticate("jwt", { session: false });
 const app = express();
 
 app.all("*", function (req, res, next) {
-  console.log("origin", req.headers.origin);
-  res.header("Access-Control-Allow-Origin", req.header("origin"));
+  res.header("Access-Control-Allow-Origin", req.headers.origin);
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Credentials", "true");
+  console.log(res.getHeaders());
   next();
 });
 
