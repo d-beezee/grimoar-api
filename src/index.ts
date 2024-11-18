@@ -16,6 +16,7 @@ const authenticated = passport.authenticate("jwt", { session: false });
 const app = express();
 
 app.all("*", function (req, res, next) {
+  console.log("origin", req.headers.origin);
   res.header("Access-Control-Allow-Origin", req.header("origin"));
   res.header(
     "Access-Control-Allow-Headers",
