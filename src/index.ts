@@ -1,5 +1,4 @@
 import cookieParser from "cookie-parser";
-import cors from "cors";
 import express from "express";
 import * as OpenApiValidator from "express-openapi-validator";
 import passport from "passport";
@@ -16,21 +15,16 @@ import root from "./routes/root";
 const authenticated = passport.authenticate("jwt", { session: false });
 const app = express();
 
-app.use(
-  cors({
-    credentials: true,
-    origin: function (origin, callback) {
-      callback(null, [
-        "capacitor://localhost",
-        "http://localhost",
-        "https://localhost",
-        "http://localhost:5173",
-        "http://192.168.1.25:8100",
-      ]);
-    },
-  })
-);
-
+app.all("*", function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", req.header("origin"));
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
 app.use(cookieParser(config.cookies.key));
 app.use(express.json());
 app.use(passport.initialize());
