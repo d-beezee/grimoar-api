@@ -15,7 +15,21 @@ import root from "./routes/root";
 
 const authenticated = passport.authenticate("jwt", { session: false });
 const app = express();
-app.use(cors());
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      callback(null, [
+        "capacitor://localhost",
+        "http://localhost",
+        "https://localhost",
+        "http://localhost:5173",
+        "http://192.168.1.25:8100",
+      ]);
+    },
+  })
+);
+
 app.use(cookieParser(config.cookies.key));
 app.use(express.json());
 app.use(passport.initialize());
