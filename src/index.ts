@@ -13,7 +13,11 @@ import protectedRoute from "./routes/protected";
 import register from "./routes/register";
 import root from "./routes/root";
 
-const authenticated = passport.authenticate("jwt", { session: false });
+const authenticated = passport.authenticate("jwt", {
+  session: false,
+  failureRedirect: "/unauthorized",
+});
+
 const app = express();
 
 app.use(function (req, res, next) {
@@ -38,6 +42,9 @@ app.use(cookieParser(config.cookies.key));
 app.use(express.json());
 app.use(passport.initialize());
 
+app.get("/unauthorized", (req, res) => {
+  res.json({ message: "Non autorizzato" });
+});
 app.get("/reference", (req, res) => {
   res.sendFile("reference/api.yaml", { root: "./src" });
 });
