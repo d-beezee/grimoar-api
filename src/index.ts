@@ -43,7 +43,7 @@ app.use(express.json());
 app.use(passport.initialize());
 
 app.get("/unauthorized", (req, res) => {
-  res.json({ message: "Non autorizzato" });
+  res.status(401).json({ message: "Non autorizzato" });
 });
 app.get("/reference", (req, res) => {
   res.sendFile("reference/api.yaml", { root: "./src" });
