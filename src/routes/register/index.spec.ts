@@ -7,14 +7,30 @@ import request from "supertest";
 const mockingoose = mockingooseDefault as typeof typed;
 
 describe("POST /register", () => {
-  it("should return 201 OK", async () => {
-    const res = await request(app).post("/register").send({
-      email: "davidnuke@gmail.com",
-      password: "password",
+  describe("when the email is not in use", () => {
+    beforeAll(() => {
+      mockingoose(User).toReturn(null, "findOne");
     });
+    it("should return 201 OK", async () => {
+      const res = await request(app).post("/register").send({
+        email: "example@example.com",
+        password: "password",
+      });
 
-    mockingoose(User).toReturn([], "find");
+      expect(res.status).toBe(201);
+    });
+  });
+  describe("when the email is already in use", () => {
+    beforeAll(() => {
+      mockingoose(User).toReturn({ email: "example@example.com" }, "findOne");
+    });
+    it("should return 409", async () => {
+      const res = await request(app).post("/register").send({
+        email: "example@example.com",
+        password: "password",
+      });
 
-    expect(res.status).toBe(201);
+      expect(res.status).toBe(409);
+    });
   });
 });
