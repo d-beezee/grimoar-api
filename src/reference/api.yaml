@@ -206,6 +206,51 @@ paths:
               required:
                 - email
                 - password
+  /games:
+    get:
+      summary: All games
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                x-examples:
+                  Example 1:
+                    - name: string
+                      description: string
+                      date: 0
+                      image: string
+                      vote: 0
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    year:
+                      type: integer
+                      x-stoplight:
+                        id: sgavjcu3ifgft
+                    image:
+                      type: string
+                    vote:
+                      type: integer
+                      minimum: 0
+                      maximum: 5
+                  required:
+                    - name
+                    - description
+                    - year
+                    - image
+      operationId: get-games
+      description: ''
+      security:
+        - JWT: []
+    parameters: []
 components:
   schemas: {}
   securitySchemes:
