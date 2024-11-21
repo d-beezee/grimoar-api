@@ -10,7 +10,8 @@ const route = async (
 ) => {
   const games = await getGames();
 
-  return res.json(games);
+  res.json(games);
+  return;
 
   async function getGames() {
     const games = await Game.find();
