@@ -27,7 +27,6 @@ app.use(function (req, res, next) {
     "GET, POST, PUT, DELETE, OPTIONS"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
-  console.log(res.getHeaders());
   next();
 });
 

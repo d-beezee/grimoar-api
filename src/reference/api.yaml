@@ -26,8 +26,6 @@ paths:
                 required:
                   - message
       operationId: get-root
-      requestBody:
-        content: {}
     parameters: []
   /protected:
     get:
