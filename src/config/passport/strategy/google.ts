@@ -7,7 +7,7 @@ const google = new GoogleStrategy(
   {
     clientID: config.google.clientId,
     clientSecret: config.google.clientSecret,
-    callbackURL: "http://grimoar-api.vercel.app/auth/google/callback",
+    callbackURL: "/auth/google/callback",
   },
   async (accessToken, refreshToken, profile, done) => {
     try {
