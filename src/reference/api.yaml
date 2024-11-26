@@ -216,7 +216,6 @@ paths:
           content:
             application/json:
               schema:
-                type: array
                 x-examples:
                   Example 1:
                     - name: string
@@ -224,35 +223,92 @@ paths:
                       date: 0
                       image: string
                       vote: 0
+                type: array
                 items:
-                  type: object
-                  properties:
-                    name:
-                      type: string
-                    description:
-                      type: string
-                    year:
-                      type: integer
-                      x-stoplight:
-                        id: sgavjcu3ifgft
-                    image:
-                      type: string
-                    vote:
-                      type: integer
-                      minimum: 0
-                      maximum: 5
-                  required:
-                    - name
-                    - description
-                    - year
-                    - image
+                  $ref: '#/components/schemas/GameBase'
+              examples: {}
       operationId: get-games
       description: ''
       security:
         - JWT: []
     parameters: []
+  '/games/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/GameBase'
+                  - type: object
+                    x-stoplight:
+                      id: 1kfqf9dhakzt9
+                    properties:
+                      fullImage:
+                        type: string
+                        x-stoplight:
+                          id: aiih7qovzd0nc
+                      longDescription:
+                        type: string
+                        x-stoplight:
+                          id: p5k3euqodeh1q
+                      tags:
+                        type: array
+                        x-stoplight:
+                          id: vrwo6qlfbxsnj
+                        items:
+                          x-stoplight:
+                            id: bxywopqqjca1l
+                          type: string
+                      publisher:
+                        type: string
+                        x-stoplight:
+                          id: hfkvkhzg1t7r8
+                    required:
+                      - fullImage
+                      - publisher
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+      operationId: get-games-id
+      security:
+        - JWT: []
 components:
-  schemas: {}
+  schemas:
+    GameBase:
+      type: object
+      x-examples:
+        Example 1:
+          name: string
+          description: string
+          year: 0
+          image: string
+          vote: 0
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        year:
+          type: integer
+        image:
+          type: string
+        vote:
+          type: integer
+      required:
+        - name
+        - description
+        - year
+        - image
   securitySchemes:
     JWT:
       type: http
@@ -263,6 +319,9 @@ components:
       content:
         application/json:
           schema:
+            type: object
             properties:
-              id:
+              message:
                 type: string
+                x-stoplight:
+                  id: 1pivfjtt3f5nw

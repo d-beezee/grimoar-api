@@ -1,13 +1,11 @@
 import app from "@src/index";
-import Game, { IGame } from "@src/models/Game";
-import typed, * as mockingooseDefault from "mockingoose";
-import { Document } from "mongoose";
+import Game from "@src/models/Game";
 import request from "supertest";
 
 // @ts-ignore
-const mockingoose = mockingooseDefault as typeof typed;
 
 jest.mock("@src/config/passport/strategy/jwt");
+jest.mock("@src/features/db");
 
 describe("GET /games/", () => {
   it("should return 200 OK", async () => {
@@ -18,24 +16,21 @@ describe("GET /games/", () => {
   });
 
   describe("with a list of games", () => {
-    beforeAll(() => {
-      mockingoose(Game).toReturn(
-        [
-          {
-            name: "D&D",
-            publishYear: 1983,
-            description: "Dungeons and Dragons",
-            image: "https://example.com/dnd.jpg",
-          },
-          {
-            name: "Vampire",
-            publishYear: 1991,
-            description: "Vampire: The Masquerade",
-            image: "https://example.com/vtm.jpg",
-          },
-        ] satisfies Omit<IGame, keyof Document>[],
-        "find"
-      );
+    beforeAll(async () => {
+      const DnD = new Game({
+        name: "D&D",
+        publishYear: 1983,
+        description: "Dungeons and Dragons",
+        image: "https://example.com/dnd.jpg",
+      });
+      await DnD.save();
+      const Vampire = new Game({
+        name: "Vampire",
+        publishYear: 1991,
+        description: "Vampire: The Masquerade",
+        image: "https://example.com/vtm.jpg",
+      });
+      await Vampire.save();
     });
     it("should return the list of games", async () => {
       const res = await request(app)

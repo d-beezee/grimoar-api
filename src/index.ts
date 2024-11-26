@@ -9,6 +9,7 @@ import googleAuth from "./routes/auth/google";
 import passwordAuth from "./routes/auth/password";
 import verify from "./routes/auth/verify";
 import gamesRoute from "./routes/games";
+import gamesByIdRoute from "./routes/games/id/_get";
 import protectedRoute from "./routes/protected";
 import register from "./routes/register";
 import root from "./routes/root";
@@ -64,6 +65,7 @@ app.post("/auth/password", passwordAuth);
 app.post("/auth/google", googleAuth);
 app.get("/protected", authenticated, protectedRoute);
 app.get("/games", authenticated, gamesRoute);
+app.get("/games/:id", authenticated, gamesByIdRoute);
 
 connect();
 

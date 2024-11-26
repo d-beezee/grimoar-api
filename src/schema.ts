@@ -140,10 +140,37 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/games/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        /** Your GET endpoint */
+        get: operations["get-games-id"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: never;
+    schemas: {
+        GameBase: {
+            name: string;
+            description: string;
+            year: number;
+            image: string;
+            vote?: number;
+        };
+    };
     responses: {
         /** @description Example response */
         ErrorResponse: {
@@ -152,7 +179,7 @@ export interface components {
             };
             content: {
                 "application/json": {
-                    id?: string;
+                    message?: string;
                 };
             };
         };
@@ -352,11 +379,7 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody?: {
-            content: {
-                "*/*"?: never;
-            };
-        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
@@ -364,15 +387,37 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        name: string;
-                        description: string;
-                        year: number;
-                        image: string;
-                        vote?: number;
-                    }[];
+                    "application/json": components["schemas"]["GameBase"][];
                 };
             };
+        };
+    };
+    "get-games-id": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GameBase"] & {
+                        fullImage: string;
+                        longDescription?: string;
+                        tags?: string[];
+                        publisher: string;
+                    };
+                };
+            };
+            404: components["responses"]["ErrorResponse"];
         };
     };
 }
