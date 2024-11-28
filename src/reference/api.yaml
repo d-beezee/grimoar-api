@@ -64,6 +64,8 @@ paths:
                       id: ue02k8h47nhl0
                 required:
                   - token
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
       requestBody:
         content:
           application/json:

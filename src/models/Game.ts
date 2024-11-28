@@ -2,6 +2,8 @@ import mongoose, { Document, Model, Schema } from "mongoose";
 import { IGameTag } from "./GameTag";
 import { IPublisher } from "./Publisher";
 
+require("./GameTag");
+
 export interface IGame extends Document {
   name: string;
   publishYear: number;
