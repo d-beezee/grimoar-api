@@ -24,20 +24,36 @@ const route = async (req: Request, res: Response) => {
       return;
     }
 
+    const user = await userGetOrCreate(email);
+
+    const token = sign({ email });
+    const cookie = `${user.email}||${user.getCrypted()}`;
+
+    // Restituisci il token al client
+    res
+      .cookie("auth", cookie, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        maxAge: 28 * 24 * 60 * 60 * 1000,
+        signed: true,
+      })
+      .json({ token });
+  } catch (error) {
+    console.error("Errore durante la verifica del token Google:", error);
+    res.status(401).json({ message: "Token non valido" });
+  }
+
+  async function userGetOrCreate(email: string) {
     const existingUser = await User.findOne({ email });
 
     if (!existingUser) {
       const newUser = new User({ email });
       await newUser.save();
+      return newUser;
     }
 
-    const token = sign({ email });
-
-    // Restituisci il token al client
-    res.json({ token });
-  } catch (error) {
-    console.error("Errore durante la verifica del token Google:", error);
-    res.status(401).json({ message: "Token non valido" });
+    return existingUser;
   }
 };
 
