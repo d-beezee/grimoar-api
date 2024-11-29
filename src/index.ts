@@ -13,6 +13,7 @@ import gamesByIdRoute from "./routes/games/id/_get";
 import protectedRoute from "./routes/protected";
 import register from "./routes/register";
 import root from "./routes/root";
+import deleteMe from "./routes/users/me/_delete";
 
 const authenticated = passport.authenticate("jwt", {
   session: false,
@@ -66,6 +67,7 @@ app.post("/auth/google", googleAuth);
 app.get("/protected", authenticated, protectedRoute);
 app.get("/games", authenticated, gamesRoute);
 app.get("/games/:id", authenticated, gamesByIdRoute);
+app.delete("/users/me", authenticated, deleteMe);
 
 connect();
 

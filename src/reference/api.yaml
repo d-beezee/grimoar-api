@@ -284,6 +284,24 @@ paths:
       operationId: get-games-id
       security:
         - JWT: []
+  /users/me:
+    delete:
+      summary: ''
+      operationId: delete-users-me
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    x-stoplight:
+                      id: orgrr6pgvnc29
+      security:
+        - JWT: []
 components:
   schemas:
     GameBase:
