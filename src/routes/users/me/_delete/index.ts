@@ -8,10 +8,15 @@ const route = async (
     operations["delete-users-me"]["responses"]["200"]["content"]["application/json"]
   >
 ) => {
-  if (!req?.user?.email)
-    return res.status(400).json({ message: "Bad request" });
+  if (!req?.user?.email) {
+    res.status(400).json({ message: "Bad request" });
+    return;
+  }
   const currentUser = User.findOne({ email: req.user.email });
-  if (!currentUser) return res.status(404).json({ message: "User not found" });
+  if (!currentUser) {
+    res.status(404).json({ message: "User not found" });
+    return;
+  }
   await currentUser.deleteOne();
 
   res.json({
