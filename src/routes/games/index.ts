@@ -17,6 +17,7 @@ const route = async (
     const games = await Game.find();
     if (!games) return [];
     return games.map((game) => ({
+      id: game.id,
       name: game.name,
       description: game.description,
       year: game.publishYear,

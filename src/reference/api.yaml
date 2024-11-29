@@ -296,6 +296,10 @@ components:
           image: string
           vote: 0
       properties:
+        id:
+          type: string
+          x-stoplight:
+            id: 1yocliz03o58b
         name:
           type: string
         description:
@@ -307,6 +311,7 @@ components:
         vote:
           type: integer
       required:
+        - id
         - name
         - description
         - year

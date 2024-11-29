@@ -164,6 +164,7 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         GameBase: {
+            id: string;
             name: string;
             description: string;
             year: number;
@@ -262,6 +263,7 @@ export interface operations {
                     };
                 };
             };
+            400: components["responses"]["ErrorResponse"];
         };
     };
     "post-auth-verify": {

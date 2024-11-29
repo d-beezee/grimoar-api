@@ -17,6 +17,7 @@ const route = async (
   }
 
   res.json({
+    id: game.id,
     name: game.name,
     year: game.publishYear,
     description: game.description,
