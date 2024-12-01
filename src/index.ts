@@ -10,6 +10,8 @@ import passwordAuth from "./routes/auth/password";
 import verify from "./routes/auth/verify";
 import gamesRoute from "./routes/games";
 import gamesByIdRoute from "./routes/games/id/_get";
+import getVoteByGame from "./routes/games/id/votes/_get";
+import voteGameById from "./routes/games/id/votes/_post";
 import protectedRoute from "./routes/protected";
 import register from "./routes/register";
 import root from "./routes/root";
@@ -55,7 +57,12 @@ app.use(
   OpenApiValidator.middleware({
     apiSpec: "./src/reference/api.yaml",
     validateRequests: true,
-    validateResponses: true,
+    validateResponses: {
+      onError: (err, json, req) => {
+        console.error(err);
+        throw err;
+      },
+    },
   })
 );
 
@@ -67,6 +74,8 @@ app.post("/auth/google", googleAuth);
 app.get("/protected", authenticated, protectedRoute);
 app.get("/games", authenticated, gamesRoute);
 app.get("/games/:id", authenticated, gamesByIdRoute);
+app.post("/games/:id/votes", authenticated, voteGameById);
+app.get("/games/:id/votes", authenticated, getVoteByGame);
 app.delete("/users/me", authenticated, deleteMe);
 
 connect();

@@ -2,6 +2,9 @@ import app from "@src/index";
 import Game from "@src/models/Game";
 import GameTag from "@src/models/GameTag";
 import Publisher from "@src/models/Publisher";
+import User from "@src/models/User";
+import Vote from "@src/models/Vote";
+import mongoose from "mongoose";
 import request from "supertest";
 
 // @ts-ignore
@@ -190,6 +193,52 @@ describe("GET /games/{id}", () => {
       expect(res.body).toEqual(
         expect.objectContaining({
           tags: ["Fantasy"],
+        })
+      );
+    });
+  });
+  describe("with votes", () => {
+    beforeAll(async () => {
+      const { user1, user2, user3 } = {
+        user1: new mongoose.Types.ObjectId(),
+        user2: new mongoose.Types.ObjectId(),
+        user3: new mongoose.Types.ObjectId(),
+      };
+      await User.create([
+        { id: user1, email: "one@example.com" },
+        { id: user2, email: "two@example.com" },
+        { id: user3, email: "three@example.com" },
+      ]);
+      await Vote.create([
+        { value: 1, game: "673f93271fd83bd6e538e168", user: user1 },
+        { value: 4, game: "673f93271fd83bd6e538e168", user: user2 },
+        { value: 5, game: "673f93271fd83bd6e538e168", user: user3 },
+      ]);
+      const DnD = new Game({
+        _id: "673f93271fd83bd6e538e168",
+        name: "D&D",
+        publishYear: 1983,
+        description: "Dungeons and Dragons",
+        image: "https://example.com/dnd.jpg",
+        imageFull: "https://example.com/dnd-full.jpg",
+        longDescription: "A long description",
+      });
+      await DnD.save();
+    });
+    afterAll(async () => {
+      await Game.deleteMany({});
+      await User.deleteMany({});
+      await Vote.deleteMany({});
+    });
+
+    it("should return vote average", async () => {
+      const res = await request(app)
+        .get("/games/673f93271fd83bd6e538e168")
+        .set("Authorization", "Bearer user");
+
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          vote: 3.3,
         })
       );
     });

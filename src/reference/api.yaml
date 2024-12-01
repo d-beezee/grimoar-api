@@ -302,6 +302,58 @@ paths:
                       id: orgrr6pgvnc29
       security:
         - JWT: []
+  '/games/{id}/votes':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    post:
+      summary: ''
+      operationId: post-games-id-votes
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vote:
+                    $ref: '#/components/schemas/Vote'
+                required:
+                  - vote
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                vote:
+                  $ref: '#/components/schemas/Vote'
+              required:
+                - vote
+        description: ''
+    get:
+      summary: ''
+      operationId: get-games-id-votes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vote:
+                    $ref: '#/components/schemas/Vote'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - JWT: []
 components:
   schemas:
     GameBase:
@@ -327,13 +379,21 @@ components:
         image:
           type: string
         vote:
-          type: integer
+          $ref: '#/components/schemas/Vote'
       required:
         - id
         - name
         - description
         - year
         - image
+    Vote:
+      title: Vote
+      x-stoplight:
+        id: ufbd9u7lcpvek
+      type: number
+      minimum: 1
+      maximum: 5
+      format: float
   securitySchemes:
     JWT:
       type: http

@@ -175,6 +175,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/games/{id}/votes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get: operations["get-games-id-votes"];
+        put?: never;
+        post: operations["post-games-id-votes"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -185,8 +203,13 @@ export interface components {
             description: string;
             year: number;
             image: string;
-            vote?: number;
+            vote?: components["schemas"]["Vote"];
         };
+        /**
+         * Vote
+         * Format: float
+         */
+        Vote: number;
     };
     responses: {
         /** @description Example response */
@@ -445,11 +468,7 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody?: {
-            content: {
-                "*/*"?: never;
-            };
-        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
@@ -462,6 +481,62 @@ export interface operations {
                     };
                 };
             };
+        };
+    };
+    "get-games-id-votes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        vote?: components["schemas"]["Vote"];
+                    };
+                };
+            };
+            404: components["responses"]["ErrorResponse"];
+        };
+    };
+    "post-games-id-votes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    vote: components["schemas"]["Vote"];
+                };
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        vote: components["schemas"]["Vote"];
+                    };
+                };
+            };
+            404: components["responses"]["ErrorResponse"];
         };
     };
 }
