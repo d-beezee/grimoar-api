@@ -35,7 +35,10 @@ const route = async (
   async function submitVote() {
     if (!req.user) throw new Error("User not found");
     await Vote.updateOne(
-      { game: req.params.id, user: req.user._id },
+      {
+        game: req.params.id,
+        user: req.user._id,
+      },
       { $set: { value: req.body.vote } },
       { upsert: true }
     );

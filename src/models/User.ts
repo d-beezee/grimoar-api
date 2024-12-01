@@ -4,7 +4,6 @@ import crypto from "crypto";
 import mongoose, { Document, FilterQuery, Model, Schema } from "mongoose";
 
 export interface IUser extends Document {
-  _id: string;
   email: string;
   password?: string;
   googleId?: string;

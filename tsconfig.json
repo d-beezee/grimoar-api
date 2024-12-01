@@ -22,7 +22,8 @@
     "noErrorTruncation": true,
     "paths": {
       "@src/*": ["src/*"]
-    }
+    },
+    "types": ["node", "jest", "./src/express.d.ts"]
   },
   "include": ["src"]
 }

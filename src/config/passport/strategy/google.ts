@@ -18,7 +18,7 @@ const google = new GoogleStrategy(
             ? profile.emails[0].value
             : undefined,
       });
-      return done(null, user);
+      return done(null, { ...user, _id: user.id });
     } catch (error) {
       return done(error, false);
     }

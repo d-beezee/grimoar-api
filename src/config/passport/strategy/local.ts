@@ -19,7 +19,7 @@ const strategy = new LocalStrategy(
       return cb(null, false, { message: "Incorrect email or password." });
     }
 
-    return cb(null, user);
+    return cb(null, { ...user, _id: user.id });
   }
 );
 
