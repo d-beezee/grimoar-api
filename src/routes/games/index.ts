@@ -16,20 +16,40 @@ const route = async (
 
   async function getGames() {
     // Step 1: Ottieni la media dei voti per ogni gioco
-    const voteAverages = await Vote.aggregate([
+    const voteStats = await Vote.aggregate([
       {
         $group: {
           _id: "$game",
           averageVote: { $avg: "$value" },
+          voteDistribution: {
+            $push: "$value",
+          },
         },
       },
     ]);
 
     // Crea una mappa per accedere velocemente alla media
-    const voteMap = voteAverages.reduce((map, vote) => {
-      map[vote._id.toString()] = vote.averageVote;
+    const voteMap = voteStats.reduce((map, vote) => {
+      map[vote._id.toString()] = parseFloat(vote.averageVote.toFixed(1));
       return map;
     }, {} as Record<string, number>);
+
+    const distributionMap = voteStats.reduce((map, vote) => {
+      const distribution: Record<1 | 2 | 3 | 4 | 5, number> = {
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0,
+      };
+      vote.voteDistribution.forEach((value: number) => {
+        if ([1, 2, 3, 4, 5].includes(value))
+          distribution[value as 1 | 2 | 3 | 4 | 5]++;
+      });
+
+      map[vote._id.toString()] = distribution;
+      return map;
+    }, {} as Record<string, { 1: number; 2: number; 3: number; 4: number; 5: number }>);
 
     // Step 2: Recupera tutti i giochi e aggiungi la media
     const games = await Game.find();
@@ -40,7 +60,8 @@ const route = async (
       description: game.description,
       year: game.publishYear,
       image: game.image,
-      vote: voteMap[game.id] ?? undefined, // undefined se non ci sono voti
+      vote: voteMap[game.id] ?? undefined,
+      voteDistribution: distributionMap[game.id] ?? undefined,
     }));
   }
 };

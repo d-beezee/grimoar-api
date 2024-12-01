@@ -107,6 +107,12 @@ describe("GET /games/", () => {
           value: 4,
         });
         await vote2.save();
+        const vote3 = new Vote({
+          game: "5f8f8b3b7f3b4b001f3f4b1b",
+          user: "000000000000000000000001",
+          value: 4,
+        });
+        await vote3.save();
       });
 
       it("should return the game votes average", async () => {
@@ -121,9 +127,29 @@ describe("GET /games/", () => {
           ])
         );
         const dnd = res.body.find((game: any) => game.name === "D&D");
-        expect(dnd).toHaveProperty("vote", 4.5);
+        expect(dnd).toHaveProperty("vote", 4.3);
         const vampire = res.body.find((game: any) => game.name === "Vampire");
         expect(vampire).not.toHaveProperty("vote");
+      });
+      it("should return the game votes distribution", async () => {
+        const res = await request(app)
+          .get("/games")
+          .set("Authorization", "Bearer user");
+
+        expect(res.body).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              name: "D&D",
+              voteDistribution: {
+                1: 0,
+                2: 0,
+                3: 0,
+                4: 2,
+                5: 1,
+              },
+            }),
+          ])
+        );
       });
     });
   });

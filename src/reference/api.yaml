@@ -276,6 +276,31 @@ paths:
                         type: string
                         x-stoplight:
                           id: hfkvkhzg1t7r8
+                      voteDistribution:
+                        type: object
+                        x-stoplight:
+                          id: 6c7dwpkmkxp0q
+                        properties:
+                          '1':
+                            type: number
+                            x-stoplight:
+                              id: p5wwlzd1tkgl0
+                          '2':
+                            type: number
+                            x-stoplight:
+                              id: kmmbevum7bfwk
+                          '3':
+                            type: number
+                            x-stoplight:
+                              id: gw5k7bwxe0500
+                          '4':
+                            type: number
+                            x-stoplight:
+                              id: arku5x80c5i64
+                          '5':
+                            type: number
+                            x-stoplight:
+                              id: qko55xjf8qat6
                     required:
                       - fullImage
                       - publisher
