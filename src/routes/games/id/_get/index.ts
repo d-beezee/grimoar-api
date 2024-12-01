@@ -29,7 +29,8 @@ const route = async (
     longDescription: game.longDescription,
     tags: game.tags ? game.tags.map((tag) => tag.name) : undefined,
     publisher: game.publisher ? game.publisher.name : "Unknown",
-    vote,
+    vote: vote?.vote,
+    voteDistribution: vote?.distribution,
   });
   return;
 
@@ -52,12 +53,31 @@ const route = async (
         $group: {
           _id: null, // Gruppo unico, dato che ci interessa solo la media
           averageValue: { $avg: "$value" }, // Calcola la media dei valori
+          voteDistribution: {
+            $push: "$value",
+          },
         },
       },
     ]);
+
     if (!votes.length) return undefined;
 
-    return parseFloat(votes[0].averageValue.toFixed(1));
+    const distribution: Record<1 | 2 | 3 | 4 | 5, number> = {
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+    };
+    votes[0].voteDistribution.forEach((value: number) => {
+      if ([1, 2, 3, 4, 5].includes(value))
+        distribution[value as 1 | 2 | 3 | 4 | 5]++;
+    });
+
+    return {
+      vote: parseFloat(votes[0].averageValue.toFixed(1)),
+      distribution,
+    };
   }
 };
 

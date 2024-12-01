@@ -242,5 +242,16 @@ describe("GET /games/{id}", () => {
         })
       );
     });
+    it("should return vote distribution", async () => {
+      const res = await request(app)
+        .get("/games/673f93271fd83bd6e538e168")
+        .set("Authorization", "Bearer user");
+
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          voteDistribution: { 1: 1, 2: 0, 3: 0, 4: 1, 5: 1 },
+        })
+      );
+    });
   });
 });
