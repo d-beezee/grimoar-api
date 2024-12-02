@@ -1,16 +1,15 @@
 import app from "@src/index";
 import User from "@src/models/User";
-import typed, * as mockingooseDefault from "mockingoose";
 import request from "supertest";
 
-// @ts-ignore
-const mockingoose = mockingooseDefault as typeof typed;
+jest.mock("@src/features/db");
 
 describe("POST /register", () => {
+  afterEach(async () => {
+    await User.deleteMany({});
+  });
+
   describe("when the email is not in use", () => {
-    beforeAll(() => {
-      mockingoose(User).toReturn(null, "findOne");
-    });
     it("should return 201 OK", async () => {
       const res = await request(app).post("/register").send({
         email: "example@example.com",
@@ -21,8 +20,11 @@ describe("POST /register", () => {
     });
   });
   describe("when the email is already in use", () => {
-    beforeAll(() => {
-      mockingoose(User).toReturn({ email: "example@example.com" }, "findOne");
+    beforeEach(async () => {
+      const user = new User({
+        email: "example@example.com",
+      });
+      await user.save();
     });
     it("should return 409", async () => {
       const res = await request(app).post("/register").send({

@@ -12,7 +12,7 @@ const route = async (req: Request, res: Response) => {
 
   try {
     // Verifica se l'utente esiste già
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.exists({ email });
     if (existingUser) {
       res.status(409).json({ message: "Email già in uso" });
       return;
