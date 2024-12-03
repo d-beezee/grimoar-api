@@ -17,9 +17,10 @@ const route = async (req: Request, res: Response) => {
       res.status(409).json({ message: "Email già in uso" });
       return;
     }
+    const name = email.split("@")[0];
 
     // Crea un nuovo utente
-    const newUser = new User({ email, password });
+    const newUser = new User({ email, password, name });
     await newUser.save();
 
     // Genera un token JWT

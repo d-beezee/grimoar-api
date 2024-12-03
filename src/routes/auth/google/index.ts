@@ -47,8 +47,10 @@ const route = async (req: Request, res: Response) => {
   async function userGetOrCreate(email: string) {
     const existingUser = await User.findOne({ email });
 
+    const name = email.split("@")[0];
+
     if (!existingUser) {
-      const newUser = new User({ email });
+      const newUser = new User({ email, name });
       await newUser.save();
       return newUser;
     }

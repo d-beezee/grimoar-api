@@ -2,6 +2,7 @@ import app from "@src/index";
 import User from "@src/models/User";
 import request from "supertest";
 
+jest.mock("@src/config/passport/strategy/jwt");
 jest.mock("@src/features/db");
 
 describe("POST /register", () => {
@@ -17,6 +18,33 @@ describe("POST /register", () => {
       });
 
       expect(res.status).toBe(201);
+    });
+
+    it("should create user", async () => {
+      await request(app).post("/register").send({
+        email: "example@example.com",
+        password: "password",
+      });
+
+      const res = await request(app)
+        .get("/users/me")
+        .set("Authorization", "Bearer user");
+
+      expect(res.body).toEqual(
+        expect.objectContaining({ email: "example@example.com" })
+      );
+    });
+    it("should create user with name equal to first part of email", async () => {
+      await request(app).post("/register").send({
+        email: "example@example.com",
+        password: "password",
+      });
+
+      const res = await request(app)
+        .get("/users/me")
+        .set("Authorization", "Bearer user");
+
+      expect(res.body).toEqual(expect.objectContaining({ name: "example" }));
     });
   });
   describe("when the email is already in use", () => {
