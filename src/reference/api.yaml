@@ -327,6 +327,39 @@ paths:
                       id: orgrr6pgvnc29
       security:
         - JWT: []
+    get:
+      summary: ''
+      operationId: get-users-me
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    x-stoplight:
+                      id: qv8isryosv49i
+                  email:
+                    type: string
+                    x-stoplight:
+                      id: 0xsqzoq4nyiz5
+                  image:
+                    type: string
+                    x-stoplight:
+                      id: eb8c4j6o64216
+                required:
+                  - name
+                  - email
+                  - image
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - JWT: []
   '/games/{id}/votes':
     parameters:
       - schema:

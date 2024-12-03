@@ -7,6 +7,8 @@ export interface IUser extends Document {
   _id: string;
   email: string;
   password?: string;
+  image?: string;
+  name: string;
   googleId?: string;
   facebookId?: string;
   validatePassword: (password: string) => Promise<boolean>;
@@ -21,6 +23,8 @@ interface UserModel extends Model<IUser> {
 
 const userSchema = new Schema<IUser>({
   email: { type: String, unique: true },
+  name: String,
+  image: String,
   password: String,
   googleId: String,
   facebookId: String,

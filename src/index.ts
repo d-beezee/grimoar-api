@@ -16,6 +16,7 @@ import protectedRoute from "./routes/protected";
 import register from "./routes/register";
 import root from "./routes/root";
 import deleteMe from "./routes/users/me/_delete";
+import getMe from "./routes/users/me/_get";
 
 const authenticated = passport.authenticate("jwt", {
   session: false,
@@ -77,6 +78,7 @@ app.get("/games/:id", authenticated, gamesByIdRoute);
 app.post("/games/:id/votes", authenticated, voteGameById);
 app.get("/games/:id/votes", authenticated, getVoteByGame);
 app.delete("/users/me", authenticated, deleteMe);
+app.get("/users/me", authenticated, getMe);
 
 connect();
 

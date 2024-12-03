@@ -166,7 +166,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: operations["get-users-me"];
         put?: never;
         post?: never;
         delete: operations["delete-users-me"];
@@ -465,6 +465,32 @@ export interface operations {
                     };
                 };
             };
+            404: components["responses"]["ErrorResponse"];
+        };
+    };
+    "get-users-me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        name: string;
+                        email: string;
+                        image: string;
+                    };
+                };
+            };
+            400: components["responses"]["ErrorResponse"];
             404: components["responses"]["ErrorResponse"];
         };
     };
